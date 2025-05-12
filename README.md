@@ -1,2 +1,2 @@
 # PaikanvarausJS
-Toimiva paikanvaraus ohjelman runko Javascriptilla
+Toimiva paikanvarausohjelman runko Javascriptilla
