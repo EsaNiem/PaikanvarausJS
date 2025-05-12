@@ -1,0 +1,68 @@
+﻿/* Sivun taustan väriksi sininen */
+body 
+{
+  background-color: lightblue; 
+}
+
+
+/* Otsikon väri ja asettelu, 10 pikselin verran irti vasemmalta */
+h1 
+{
+  color: navy;
+  margin-left: 10px;
+}
+
+
+/* Tulostettavan tekstin asetukset */
+.tulostus
+{
+
+background-color: white;
+font-weight:bold;
+font-size:17px;
+text-align: center;
+border-style: outset;
+padding: 8px 8px;
+width:200px;
+}
+
+
+/* Paikka-kartan asetukset: keskitetään sisältö ja leveydeksi 1100 pikseliä */
+.kartta
+{
+
+text-align: center;
+width: 970px;
+}
+
+
+/* Painikkeen asetukset, väri sininen, leveys, jne. */
+button 
+{
+  background-color: #3BA3FF;
+  color: white; 
+  padding: 12px 21px;
+  text-align: center;
+  display: inline-block;
+  font-size: 15px;
+  width: 175px;
+}
+
+
+/* Kaikki tämän elueen sisälle irtautuvat vasemmalta 40 pikselin verran */
+.vasemmalta_irti
+{
+  margin-left:40px;
+}
+
+
+/* Penkki kuvat näytetään irti toisistaan 2 pikselin verran */
+img
+{	
+padding:2px;
+}	
+
+
+
+
+

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<! -- Paikkavaraus by Esa N  -->
+
+<html>
+<head>
+
+<title>Paikkavaraus</title>
+
+<! -- Annetaan sivulle myös tyylitiedosto nimeltä tyyli  -->
+<link rel="stylesheet" href="tyyli.css">
+
+</head>
+<body>
+<br>
+<div class="kartta" id="kartta"></div>
+
+<! --Sisältö näkyy tästä eteenpäin irti vasemmalta reunalta -->
+<div class="vasemmalta_irti">
+<br>
+
+<! -- Tulostusalue ilmoituksille -->
+<div class="tulostus" id="tulostus">Anna paikan numero</div>
+
+<! -- Tulostusalue loppuu tähän -->
+<br>
+<input type="kentta" id="paikkanro">
+<br>
+<br>
+
+<! -- Painike käynnistää paikanvarauksen -->
+<button onclick="Varaa()">Varaa</button>
+
+</div>
+<! --Sisältö vasemmalta reunalta loppuu tähän -->
+<br>
+<br>
+
+<! -- JavaScript alkaa tästä -->
+<script>
+
+
+// Taulukko paikkojen tilalle (0=vapaa/1=varattu)
+let paikan_tila = [];
+
+// Taulukko paikan numeroa varten
+let paikan_numero = [];
+
+// Asetetaan kuinka paljon paikkoja on käytettävissä
+let paikkoja = 99;
+
+// Paikkalaskurin alustus
+let paikkalaskuri = 0;
+
+// Muuttujien esittely
+let paikkanro
+let numero;
+let penkki;
+let alue;
+
+
+// ---------------------------------------------------------------------------------------------------------
+// Funktio muuntaa yksittäiset numerot 1-9 kahden numeron esitystavaksi, eli 1->01 ja 2->02 jne.
+// Esimerkki katsottu sivustolta https://stackoverflow.com/questions
+function Paikkalaskuri_muunnos(numero) 
+{
+// Niin kauan kuin numerot ovat alle kymmenen
+if (numero < 10)
+{
+// Lisätään numeron etuliitteeksi nolla
+numero = '0' + numero;
+}
+// Palautetaan muutettu arvo
+return numero;
+}
+
+
+// Vapaan paikan funktio
+function Vapaa() 
+{
+	// Näytetään penkin numero taulukosta ja kuvatiedosto
+	// Kuvan näyttämiseen Javascriptissa esimerkki katsottu osoitteesta https://stackoverflow.com/
+	
+	numero = document.getElementById('kartta'); // Luodaan muuttuja ja näytetään penkin numero
+	numero.innerHTML += " " + paikan_numero[i] + " "; // kuvan vasemmalla puolella
+
+	penkki = document.createElement("img"); // Luodaan ja näytetään kuva elementti
+	penkki.src = "kuvat/vapaa.jpg";
+
+	alue = document.getElementById("kartta"); // Luodaan ja näytetään kuva esille kohdassa nimeltä kartta
+	alue.appendChild(penkki); // Kuva näyttäytyy oikealla puolella
+}
+
+
+// Varatun paikan funktio
+function Varattu() 
+{
+	// Näytetään penkin numero taulukosta ja kuvatiedosto
+	// Kuvan näyttämiseen Javascriptissa esimerkki katsottu osoitteesta https://stackoverflow.com/
+	
+	numero = document.getElementById('kartta'); // Luodaan muuttuja ja näytetään penkin numero
+	numero.innerHTML += " " + paikan_numero[i] + " "; // kuvan vasemmalla puolella
+
+	penkki = document.createElement("img"); // Määäritetään kuva elementti
+	penkki.src = "kuvat/varattu.jpg";
+
+	alue = document.getElementById("kartta"); // Tuodaan kuva esille kohdassa nimeltä kartta
+	alue.appendChild(penkki); // Kuva näyttäytyy oikealla puolella
+}
+
+
+// Funktio tulostaa kaikki vapaat ja varatut paikat yhtenä karttana
+function Paikka_kartta()
+{
+	// Tulostetaan niin pitkään kuin paikkoja on asetettu taulukkoon
+	for ( i = 0; i < paikan_tila.length; i++ )
+	{ 
+	// Jos paikat-taulukossa luettavan alkion arvo on yksi, se on varattu ja kutsutaan funktio varattu()
+	if (paikan_tila[i] == 1)
+	{
+	Varattu();
+	}
+	// Jos tilan arvo on muuta kuin yksi (eli nolla), kutsutaan funktio vapaa()
+	else
+	{
+	Vapaa();
+	}
+	} // For-silmukka loppuu
+}
+// ---------------------------------------------------------------------------------------------------------
+
+// Varsinainen ohjelma alkaa tästä, jossa alustetaan paikat taulukkoon vapaina (nollina)
+// niin pitkään kuin paikkoja on asetettu
+for (let i = 1; i <= paikkoja; i++) 
+{
+	// Kasvatetaan paikkalaskuria yhdellä kun penkki lisätään
+	paikkalaskuri = paikkalaskuri + 1;
+  
+	// Tallennetaan uuden paikan tilaksi vapaa, eli nolla
+	paikan_tila.push(0);
+	
+	// Kutsutaan funktio istumapaikkojen numeroiden muuttamiseen. Tämä siksi että rivit saadaan
+	// toistumaan samalla tasolla. Muuttuja paikkalaskuri muunnetaan kahden numeron esitysmuotoon.
+	let muunnos = Paikkalaskuri_muunnos(paikkalaskuri);
+  
+	// Tallennetaan paikkanumero muutettuna, eli 1 -> 01, 2 -> 02 jne.
+	paikan_numero.push(muunnos);
+	
+} // For-silmukka loppuu
+
+
+// Kutsutaan funktiota jolla tulostetaan paikkojen kartta
+Paikka_kartta();
+
+
+// Lasketaan lipun hinta valituista vaihtoehdoista
+function Varaa() 
+{
+
+	// Putsataan istuimien kartta alue uutta varten
+	document.getElementById("kartta").innerHTML = "";
+	
+	// Luetaan syötetty paikkanumero talteen kentästä
+	paikkanro = document.getElementById("paikkanro").value;
+
+	// Tarkastetaan syötetty penkkinumero. Lisäystä ei tehdä, jos isompi kuin taulun koko (penkkien lukumäärä),
+	// numero sisältää kirjaimia, pienempi kuin nolla tai välilyöntejä.
+	if (paikkanro > paikan_tila.length || isNaN (paikkanro) || paikkanro <= 0 || paikkanro.indexOf(' ') >= 0)
+	{
+	// Kutsutaan funktiota jolla tulostetaan paikkojen kartta	
+	Paikka_kartta();
+	
+	// Annetaan virhe syötetystä tiedosta ja ilmoitetaan mihin numeroon asti paikkoja on saatavilla
+	document.getElementById("tulostus").innerHTML = "Varaus ei onnistu! Paikat varattavissa numeroon " + paikan_tila.length + " asti" ;
+	
+	// Ohjelma pysähtyy tähän, eikä mene eteenpäin lisäykseen
+	return;
+	}
+
+	// Vähennetään syötetystä paikannumerosta yksi pois, koska taulkon alkiot alkavat nollasta
+	paikkanro = paikkanro - 1;
+
+	// Jos paikan tila on jo varattu (nollan sijasta yksi), niin annetaan ilmoitus tästä
+	if (paikan_tila[paikkanro] == 1)
+	{
+	// Kutsutaan funktiota jolla tulostetaan paikkojen kartta
+	Paikka_kartta();
+
+	// Ilmoitetaan että paikka on jo varattu.
+	// Sulkeissa paikkanumeroon lisätään yksi, koska paikat alkavat oikeasti yhdestä eteenpäin, eikä nollasta
+	document.getElementById("tulostus").innerHTML = "Paikka numero " + (paikkanro + 1) + " on jo varattu!";
+	}
+	
+	// Jos paikka on vapaa, varataan se ja kirjataan tilan arvoksi yksi.
+	else
+	{
+	paikan_tila[paikkanro] = 1;
+	
+	// Ilmoitetaan onnistuneesta varauksesta.
+	// Sulkeissa paikkanumeroon lisätään yksi, koska paikat alkavat oikeasti yhdestä eteenpäin, eikä nollasta
+	document.getElementById("tulostus").innerHTML = "Paikka numero " + (paikkanro + 1) + 
+	" varattu onnistuneesti!";
+
+	// Kutsutaan funktiota jolla tulostetaan paikkojen kartta
+	Paikka_kartta();
+	
+	// Pyyhitään numerokenttä uutta syöttöä varten
+	document.getElementById('paikkanro').value = "";
+	
+	}
+}
+
+
+</script>
+<! -- JavaScript loppuu tähän -->
+
+</body>
+</html>
